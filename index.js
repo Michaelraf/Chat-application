@@ -9,7 +9,7 @@ const dbUrl = "mongodb://localhost:27017/chatApp";
 const { Server } = require("socket.io");
 const io = new Server(server);
 const userController = require('./user/user.controller');
-let connectedUserId;
+
 // const dbServer = "mongodb://ADMIN:azerty007@host:port/dbname";
 
 db.Promise = global.Promise;
@@ -38,10 +38,10 @@ io.on('connection', (socket)=>{
     });
     socket.on('disconnect', ()=>{
         console.log(socket.id + ' disconnected');
-        userController.logout({ userId : connectedUserId, socketId: socket.id});
+       /*  userController.logout({ userId : connectedUserId, socketId: socket.id}); */
     });
     socket.on('login', (auth)=>{
-        userController.login(auth).then((data)=>{
+        /* userController.login(auth).then((data)=>{
             if(data){
                 socket.emit('loginSucceded', data);
                 connectedUserId = data._id;
@@ -50,17 +50,17 @@ io.on('connection', (socket)=>{
             }
         }).catch((err)=>{
             console.log(err);
-        });
+        }); */
         
     });
     socket.on('loggedIn',()=>{
-        userController.loggedIn({userId: connectedUserId, socketId: socket.id});
+ /*        userController.loggedIn({userId: connectedUserId, socketId: socket.id});
         userController.getAllConnectedUsers().then((data)=>{
             socket.emit('newConnectedUser', data);
         }).catch((err)=>{
             console.log(err);
-        })
-    });
+        })*/
+    }); 
 });
 
 server.listen(PORT, ()=>{
