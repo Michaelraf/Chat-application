@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let socket = io();
+    if (!sessionStorage.getItem('id')) {
+      window.location.replace('/login.html');
+    } else {
+      console.log('From chat socket.id :' + socket.id);
+      socket.emit('loggedIn');
+    }
+  </script>
+  <title>Socket.IO chat</title>
+  <link rel="stylesheet" href="./assets/style/style.css">
+</head>
+
+<body>
+  <header>
+    <h1>Chat app</h1>
+    <nav>
+
+    </nav>
+  </header>
+    <section id="connectedUsers">
+      <div>
+        <ul>
+          <li>User</li>
+        </ul>
+      </div>
+    </section>
+    <section id="messagesContainer">
+      <div>
+        <ul id="messages"></ul>
+      </div>
+      <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+      </form>
+    </section>
+  <script src="./assets/script/app.js"></script>
+
+</body>
+
+</html>
