@@ -3,19 +3,10 @@
 
 <head>
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    let socket = io();
-    if (!sessionStorage.getItem('id')) {
-      window.location.replace('/login.html');
-    } else {
-      console.log('From chat socket.id :' + socket.id);
-      socket.emit('loggedIn');
-    }
-  </script>
   <title>Socket.IO chat</title>
   <link rel="stylesheet" href="./assets/style/style.css">
 </head>
-
+<!-- <script src="./assets/script/chatHead.js"></script> -->
 <body>
   <header>
     <h1>Chat app</h1>

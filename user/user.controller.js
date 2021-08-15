@@ -4,49 +4,69 @@ let Users = require('./user.model');
 const create = (req, res) => {
     let u = new Users(req.body);
     u.save().then(() => {
-        res.json({ success: true });
-    })
+        res.json({ 
+            success: true,
+            message: "User created successfully"
+        });
+    }).catch((err) => {
+        res.json({
+            success: false,
+            err
+        });
+    });
 }
 
-function login(auth) {
-    return new Promise((resolve, reject) => {
-        Users.findOne({ username: auth.username, password: auth.password }).then((data) => {
-            if (data) {
-                data.updateOne({ connected: true }).then(() => { });
-            }
-            resolve(data);
-        }).catch((err) => {
-            reject({ err })
-        })
-    })
+const login = (req, res) => {
+    Users.findOne({ username: req.body.username, password: req.body.password }).then((data) => {
+        if (data) {
+            data.updateOne({ connected: true }).then(() => { });
+            res.json({
+                success: true,
+                message: "login successfuly"
+            });
+        }
+        else {
+            res.json({
+                success: false,
+                message: "User not found"
+            });
+        }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            err
+        });
+    });
 };
 
-const loggedIn = (ids) => {
-    Users.findOne({ _id: ids.userId }).then((data) => {
+
+const logout = (req, res) => {
+    Users.findOne({ _id: req.params.id }).then((data) => {
         if (data) {
-            data.updateOne({ $push : { sockets  : ids.socketId }}).then(() => { });
+            data.updateOne({ connected: false }).then(() => { })
+            res.json({
+                success: true,
+                message: "logout successfully"
+            })
         }
+    }).catch((err) => {
+        res.json({
+            success: false,
+            err
+        })
     });
 }
 
-const logout = (ids) => {
-    Users.findOne({ _id: ids.userId }).then((data) => {
-        if (data) {
-            console.log(data);
-            data.updateOne({ $pull : { sockets: { $in : [ids.socketId] } } }).then(() => {});
-            if(data.sockets.length == 0 ){
-                data.updateOne({connected : false}).then(()=>{});
-            }
-        }
-    });
-}
-
-const getAllConnectedUsers = ()=>{
-    return new Promise((resolve, reject)=>{
-        Users.find({connected: true}).then((data)=> {
-            resolve(data);
-        }).catch((err)=>{
-            reject(err);
+const getAllConnectedUsers = (req, res) => {
+    Users.find({ connected: true }).then((data) => {
+        res.json({
+            success: true,
+            data
+        });
+    }).catch((err) => {
+        res.json({
+            success: false,
+            err
         });
     });
 }
@@ -54,7 +74,6 @@ const getAllConnectedUsers = ()=>{
 module.exports = {
     create,
     login,
-    loggedIn,
     logout,
     getAllConnectedUsers
 }
