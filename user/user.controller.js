@@ -22,7 +22,8 @@ const login = (req, res) => {
             data.updateOne({ connected: true }).then(() => { });
             res.json({
                 success: true,
-                message: "login successfuly"
+                message: "login successfuly",
+                user_id: data._id
             });
         }
         else {

@@ -1,12 +1,16 @@
 <!DOCTYPE html>
+<script src="/socket.io/socket.io.js"></script>
+<script src="./assets/script/chatHead.js"></script>
 <html>
 
 <head>
-  <script src="/socket.io/socket.io.js"></script>
-  <title>Socket.IO chat</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" initial-scale=1.0">
   <link rel="stylesheet" href="./assets/style/style.css">
+  <title>Socket.IO chat</title>
 </head>
-<!-- <script src="./assets/script/chatHead.js"></script> -->
+
 <body>
   <header>
     <h1>Chat app</h1>
@@ -14,21 +18,21 @@
 
     </nav>
   </header>
-    <section id="connectedUsers">
-      <div>
-        <ul>
-          <li>User</li>
-        </ul>
-      </div>
-    </section>
-    <section id="messagesContainer">
-      <div>
-        <ul id="messages"></ul>
-      </div>
-      <form id="form" action="">
-        <input id="input" autocomplete="off" /><button>Send</button>
-      </form>
-    </section>
+  <section id="connectedUsers">
+    <div>
+      <ul>
+        <li>User</li>
+      </ul>
+    </div>
+  </section>
+  <section id="messagesContainer">
+    <div>
+      <ul id="messages"></ul>
+    </div>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+  </section>
   <script src="./assets/script/app.js"></script>
 
 </body>
