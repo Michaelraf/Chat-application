@@ -4,6 +4,7 @@ const app = express();
 const server = http.createServer(app);
 const PORT = 1337;
 const user = require('./user/user.router');
+const message = require('./message/message.router');
 const db = require('mongoose');
 const dbUrl = "mongodb://localhost:27017/chatApp";
 const { Server } = require("socket.io");
@@ -26,6 +27,7 @@ db.connect(dbUrl, {
 app.use(express.urlencoded({extended : true}));
 app.use(express.json());
 app.use('/user', user);
+app.use('/message', message);
 app.use(express.static(process.cwd()));
 app.get('/', (req, res)=>{
     res.sendFile(process.cwd()+'/login.html');

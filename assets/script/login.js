@@ -8,7 +8,7 @@ let section = document.querySelector('section');
 submit.addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetch("http://10.215.57.98:1337/user/login", {
+    fetch("http://192.168.10.41:1337/user/login", {
         method: "POST",
         headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -20,6 +20,7 @@ submit.addEventListener('click', function (e) {
         .then((res) => {
             if (res.success === true) {
                 window.location.replace('/chat.html');
+                sessionStorage.setItem('id', res.user_id);
             }
             else {
                 let oldSpan = document.querySelector('span');
@@ -33,5 +34,4 @@ submit.addEventListener('click', function (e) {
             }
         })
         .catch(err => console.log("err : " + err));
-
 });
