@@ -4,7 +4,7 @@ let Users = require('./user.model');
 const create = (req, res) => {
     let u = new Users(req.body);
     u.save().then(() => {
-        res.json({ 
+        res.json({
             success: true,
             message: "User created successfully"
         });
@@ -14,6 +14,28 @@ const create = (req, res) => {
             err
         });
     });
+}
+
+const getUser = (req, res) => {
+    if (req.params.id) {
+        Users.findOne({ _id: req.params.id }).then((data)=>{
+            res.json({
+                success: true,
+                data
+            });
+        }).catch((err)=>{
+            res.json({
+                succces: false,
+                err
+            });
+        });
+    }
+    else{
+        res.json({
+            success: false,
+            message : "No given user_id"
+        });
+    }
 }
 
 const login = (req, res) => {
@@ -74,6 +96,7 @@ const getAllConnectedUsers = (req, res) => {
 
 module.exports = {
     create,
+    getUser,
     login,
     logout,
     getAllConnectedUsers
