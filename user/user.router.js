@@ -4,7 +4,7 @@ const userController = require('./user.controller');
 router.post('/create', (req, res) => {
     userController.create(req, res);
 });
-router.get('/:id', (req, res)=>{
+router.get('/getUser/:id', (req, res)=>{
     userController.getUser(req, res);
 });
 router.post('/login', (req, res) => {

@@ -4,11 +4,12 @@ let submit = document.querySelector('#submit');
 let usernameInput = document.querySelector('#username');
 let passwordInput = document.querySelector('#password');
 let section = document.querySelector('section');
+let connectedUsersList = document.querySelector('#connectedUsers ul');
 
 submit.addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetch("http://10.213.186.46:1337/user/login", {
+    fetch("http://192.168.10.41:1337/user/login", {
         method: "POST",
         headers: {
             'Accept': 'application/json, text/plain, */*',
@@ -35,3 +36,4 @@ submit.addEventListener('click', function (e) {
         })
         .catch(err => console.log("err : " + err));
 });
+

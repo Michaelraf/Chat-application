@@ -81,7 +81,7 @@ const logout = (req, res) => {
 }
 
 const getAllConnectedUsers = (req, res) => {
-    Users.find({ connected: true }).then((data) => {
+    Users.find({connected: true}).then((data) => {
         res.json({
             success: true,
             data

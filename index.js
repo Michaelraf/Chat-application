@@ -63,6 +63,9 @@ io.on('connection', (socket)=>{
             console.log(err);
         })*/
     }); 
+    socket.on('newConnectedUser', function(id){
+        io.emit('newConnectedUser', id);
+    })
 });
 
 server.listen(PORT, ()=>{

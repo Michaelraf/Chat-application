@@ -25,6 +25,21 @@ const create = (req, res) => {
 
 }
 
+const getAllMessages = (req, res) => {
+    Messages.find({}).populate('user_id', '-type').then((data)=>{
+        res.json({
+            success: true,
+            data
+        });
+    }).catch((err)=>{
+        res.json({
+            success: false,
+            err
+        })
+    })
+}
+
 module.exports = {
-    create
+    create,
+    getAllMessages
 }
