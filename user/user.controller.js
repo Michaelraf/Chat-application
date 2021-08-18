@@ -18,22 +18,22 @@ const create = (req, res) => {
 
 const getUser = (req, res) => {
     if (req.params.id) {
-        Users.findOne({ _id: req.params.id }).then((data)=>{
+        Users.findOne({ _id: req.params.id }).then((data) => {
             res.json({
                 success: true,
                 data
             });
-        }).catch((err)=>{
+        }).catch((err) => {
             res.json({
                 succces: false,
                 err
             });
         });
     }
-    else{
+    else {
         res.json({
             success: false,
-            message : "No given user_id"
+            message: "No given user_id"
         });
     }
 }
@@ -81,7 +81,7 @@ const logout = (req, res) => {
 }
 
 const getAllConnectedUsers = (req, res) => {
-    Users.find({connected: true}).then((data) => {
+    Users.find({ connected: true }).then((data) => {
         res.json({
             success: true,
             data
@@ -94,10 +94,49 @@ const getAllConnectedUsers = (req, res) => {
     });
 }
 
+const getSocketsId = (req, res) => {
+    Users.find({ _id: req.params.id }).then((data) => {
+        if (data) {
+            console.log(data);
+            res.json({
+                success: true,
+                data: data[0].sockets
+            });
+        }
+        else {
+            res.json({
+                success: false,
+                message: "No user found"
+            });
+        }
+    }).catch((err)=>{
+        res.json({
+            success: false,
+            err
+        });
+    })
+}
+
+const setSocket = (req, res) =>{
+    Users.updateOne({_id: req.params.userId}, {$push: {sockets: req.params.socketId}}).then((data)=>{
+        res.json({
+            success: true,
+            data
+        });
+    }).catch((err)=>{
+        res.json({
+            success: false,
+            err
+        });
+    })
+}
+
 module.exports = {
     create,
     getUser,
     login,
     logout,
-    getAllConnectedUsers
+    getAllConnectedUsers,
+    getSocketsId,
+    setSocket
 }

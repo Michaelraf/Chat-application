@@ -8,10 +8,27 @@ let listOfConnectedUsers = document.querySelector('#connectedUsers ul');
 let ip = "192.168.10.41";
 let port = 1337;
 
+// Ajout des anciens message dès connexion
+
+fetch("http://" + ip + ":" + port + "/message/getAll", {
+    method: "GET",
+    headers: {
+        'Accept': 'application/json , text/plain, */*',
+        'Content-Type': 'application/json'
+    }
+})
+    .then(res => res.json())
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.log("err : " + err);
+    });
 
 form.addEventListener('submit', function (e) {
     e.preventDefault();
     let msg = input.value;
+    let time = Date.now();
     if (msg) {
         fetch("http://" + ip + ":" + port + "/message/create/" + sessionStorage.getItem('id'), {
             method: "POST",
@@ -19,13 +36,13 @@ form.addEventListener('submit', function (e) {
                 'Accept': 'application/json, text/plain, */*',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ content: msg, created_on: Date.now() })
+            body: JSON.stringify({ content: msg, created_on: time })
         })
             .then(res => res.json())
             .then((res) => {
 
                 if (res.success === true) {
-                    socket.emit('chat message', { message: msg, id: sessionStorage.getItem('id') });
+                    socket.emit('chat message', { message: msg, id: sessionStorage.getItem('id'), created_on: time });
                     input.value = '';
                 }
                 else {
@@ -44,7 +61,8 @@ form.addEventListener('submit', function (e) {
 
 });
 
-socket.on('newConnectedUser', function (id) {
+socket.on('newConnected_User', function (id) {
+    
     fetch("http://" + ip + ":" + port + "/user/connectedUsers", {
         method: "GET",
         headers: {
@@ -56,7 +74,7 @@ socket.on('newConnectedUser', function (id) {
         .then((res) => {
             //Removing all the li in ul before append new element
             listOfConnectedUsers.innerHTML = '';
-            for(let i=0; i<res.data.length; i++){
+            for (let i = 0; i < res.data.length; i++) {
                 connectedUsers[i] = document.createElement('li');
                 connectedUsers[i].innerHTML = "<p>" + res.data[i].username + "</p>" + '<div></div>';
                 listOfConnectedUsers.appendChild(connectedUsers[i]);
@@ -65,15 +83,16 @@ socket.on('newConnectedUser', function (id) {
         .catch((err) => {
             console.log('error : ' + err);
         });
-    
+
 });
 
 
 socket.on('chat message', function (userMsg) {
-    
+    let date = new Date(userMsg.created_on);
+    let sender = document.createElement('li');
+    sender.classList.add('sender');
     if (userMsg.id != sessionStorage.getItem('id')) {
-        let user = document.createElement('li');
-        user.classList.add('sender');
+
         fetch("http://" + ip + ":" + port + "/user/getUser/" + userMsg.id, {
             method: "GET",
             headers: {
@@ -83,12 +102,12 @@ socket.on('chat message', function (userMsg) {
         })
             .then(res => res.json())
             .then((res) => {
-                user.textContent = res.data.username;
-                user.classList.add('nonClientSide');
+                sender.textContent = res.data.username + " " + date.getHours() + ":" + date.getMinutes();
+                sender.classList.add('nonClientSide');
                 let item = document.createElement('li');
                 item.classList.add('nonClientSide');
                 item.textContent = userMsg.message;
-                messages.appendChild(user);
+                messages.appendChild(sender);
                 messages.appendChild(item);
                 messagesContent.scrollTop = messagesContent.scrollHeight;
             })
@@ -97,9 +116,12 @@ socket.on('chat message', function (userMsg) {
             })
     }
     else {
+        sender.textContent = date.getHours() + ":" + date.getMinutes();
+        sender.classList.add('clientSide');
         let item = document.createElement('li');
         item.classList.add('clientSide');
         item.textContent = userMsg.message;
+        messages.appendChild(sender);
         messages.appendChild(item);
         messagesContent.scrollTop = messagesContent.scrollHeight;
     }

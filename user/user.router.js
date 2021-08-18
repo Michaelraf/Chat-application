@@ -17,4 +17,10 @@ router.put('/logout/:id', (req, res)=>{
 router.get('/connectedUsers', (req, res)=>{
     userController.getAllConnectedUsers(req, res);
 });
+router.get('/getSockets/:id', (req, res)=>{
+    userController.getSocketsId(req, res);
+});
+router.put('/setSocket/:userId/:socketId', (req, res)=>{
+    userController.setSocket(req, res);
+});
 module.exports = router;
