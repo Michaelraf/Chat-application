@@ -5,8 +5,8 @@ let messageSchema = new Schema({
         required: true
     },
     created_on: {
-        type: Date,
-        default: Date.now()
+        type: String,
+        default:new Date()
     },
 /*     room_id: {
         type: Schema.Types.ObjectId,
