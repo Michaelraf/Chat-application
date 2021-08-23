@@ -9,6 +9,8 @@ const db = require('mongoose');
 const dbUrl = "mongodb://localhost:27017/chatApp";
 const { Server } = require("socket.io");
 const io = new Server(server);
+const userController = require('./user/user.controller')
+let socketsTable = {};
 
 // const dbServer = "mongodb://ADMIN:azerty007@host:port/dbname";
 
@@ -33,17 +35,20 @@ app.get('/', (req, res)=>{
 });
 
 io.on('connection', (socket)=>{
-    console.log(socket.id+' is connected');
+    console.log(socket.id +' is connected');
     socket.on('chat message', (msg)=>{
         io.emit('chat message', msg);
     });
     socket.on('disconnect', ()=>{
-        console.log(socket.id + ' disconnected');
-       /*  userController.logout({ userId : connectedUserId, socketId: socket.id}); */
+        let socketId = socket.id;
+        userController.delete_socket(socketsTable[socketId], socketId);
+        delete(socketsTable[socketId]);
+        io.emit('anUserDeconnected', socketId);
     });
     socket.on('newConnectedUser', function(id){
-        io.emit('newConnectedUser', id);
-    })
+        io.emit('new_Connected_User', {userId: id, socketId: socket.id });
+        socketsTable[socket.id] = id;
+    });
 });
 
 server.listen(PORT, ()=>{

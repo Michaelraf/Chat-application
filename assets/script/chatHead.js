@@ -5,11 +5,5 @@ if (!sessionStorage.getItem('id')) {
 }
 else {
   let socketId;
-  let socketConnection = io.connect();
-  socketConnection.on('connect', function(){
-    socketId = socketConnection.socket.sessionid;
-    socket.emit('newConnectedUser', sessionStorage.getItem('id'));
-    console.log(socketId);
-  })
-  
+  socket.emit('newConnectedUser', sessionStorage.getItem('id'));
 }

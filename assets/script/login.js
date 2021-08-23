@@ -5,11 +5,13 @@ let usernameInput = document.querySelector('#username');
 let passwordInput = document.querySelector('#password');
 let section = document.querySelector('section');
 let connectedUsersList = document.querySelector('#connectedUsers ul');
+let ip = "192.168.10.41";
+let port = 1337;
 
 submit.addEventListener('click', function (e) {
     e.preventDefault();
 
-    fetch("http://192.168.10.41:1337/user/login", {
+    fetch("http://" + ip + ":" + port + "/user/login", {
         method: "POST",
         headers: {
             'Accept': 'application/json, text/plain, */*',

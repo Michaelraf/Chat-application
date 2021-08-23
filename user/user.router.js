@@ -23,4 +23,7 @@ router.get('/getSockets/:id', (req, res)=>{
 router.put('/setSocket/:userId/:socketId', (req, res)=>{
     userController.setSocket(req, res);
 });
+router.put('/deleteSocket/:userId/:socketId' , (req, res)=>{
+    userController.deleteSocket(req, res);
+})
 module.exports = router;

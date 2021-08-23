@@ -109,7 +109,7 @@ const getSocketsId = (req, res) => {
                 message: "No user found"
             });
         }
-    }).catch((err)=>{
+    }).catch((err) => {
         res.json({
             success: false,
             err
@@ -117,18 +117,46 @@ const getSocketsId = (req, res) => {
     })
 }
 
-const setSocket = (req, res) =>{
-    Users.updateOne({_id: req.params.userId}, {$push: {sockets: req.params.socketId}}).then((data)=>{
+const setSocket = (req, res) => {
+    Users.updateOne({ _id: req.params.userId }, { $addToSet: { sockets: req.params.socketId } }).then((data) => {
         res.json({
             success: true,
             data
         });
-    }).catch((err)=>{
+    }).catch((err) => {
         res.json({
             success: false,
             err
         });
     })
+}
+
+const deleteSocket = (req, res) => {
+    Users.updateOne({ _id: req.params.userId }, { $pull: { sockets: req.params.socketId } }).then((data) => {
+        res.json({
+            success: true,
+            data
+        });
+    }).catch((err) => {
+        console.log(err);
+    })
+}
+
+const delete_socket = (user_id, socket_id) => {
+    Users.findOne({ _id: user_id }).then((data) => {
+        if (data) {
+            if(data.sockets.length === 1){
+                data.updateOne({connected: false}).then();
+            }
+            data.updateOne({ $pull: { sockets: socket_id } }).then((u) => {
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
 }
 
 module.exports = {
@@ -138,5 +166,7 @@ module.exports = {
     logout,
     getAllConnectedUsers,
     getSocketsId,
-    setSocket
+    setSocket,
+    deleteSocket,
+    delete_socket,
 }
